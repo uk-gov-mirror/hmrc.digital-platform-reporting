@@ -51,11 +51,14 @@ class SubscriptionController @Inject()(cc: ControllerComponents,
         .updateSubscription(request.body)
         .map(_ => Ok)
   }
-  
+
   def get(): Action[AnyContent] = authenticate(parse.default).async {
     implicit request =>
       connector
         .get(request.dprsId)
-        .map(response => Ok(Json.toJson(response)))
+        .map { response =>
+          println(s"Get subscription response: ${Json.stringify(Json.toJson(response))}")
+          Ok(Json.toJson(response))
+        }
   }
 }
